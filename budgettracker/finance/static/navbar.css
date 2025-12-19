@@ -1,0 +1,53 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body {
+    height: 100vh;
+    background: #17d459;
+    background-position: center;
+}
+li {
+    list-style: none;
+
+
+}
+a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
+}
+/* linklere efekt icin kullanir üstüne gelince renk degisir */
+a:hover {
+    color: #ff6347;
+}
+header {
+    position: relative;
+    padding: 0 2rem;
+    
+}
+.navbar {
+    width: 100%;
+    height: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+    background-color: teal;
+}
+.navbar .logo a {
+    font-size: 23%;
+    font-weight: bold;
+    color: #fff;
+}
+.navbar .nav-links {
+    display: flex;
+    gap: 2rem;
+    padding-left: 0%;
+    justify-content: flex-end;
+    background-color: aqua;
+}

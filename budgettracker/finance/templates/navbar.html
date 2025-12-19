@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block head %} {% load static %}
+<link rel="stylesheet" href="{% static 'navbar.css' %}" />
+{% endblock %}
+
+{% block template %}
+<header>
+    <div class="navbar">
+       
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/navbar">Übersicht</a></li>
+                <li><a href="/transactions">Buchungen</a></li>
+                <li><a href="/budgets">Kategorien</a></li>
+                <li><a href="/reports">Auswertungen</a></li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark" href="/abmelden">Abmelden</a>
+                </li>
+            </ul>
+
+        </nav>
+        
+
+    </div>
+   
+    
+</header>
+
+{% endblock template %}
