@@ -1,0 +1,76 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: seagreen;
+}
+
+.wrapper {
+    width: 420px;
+    background: purple;
+    color: white;
+    border-radius: 30px;
+    padding: 30px 40px;
+}
+.wrapper h1 {
+    text-align: center;
+    font-size: 36px;
+  
+}
+.wrapper .input-box {
+    width: 100%;
+    height: 50px;
+    background: salmon;
+    border-radius: 40px;
+    margin: 30px 0;
+}
+.wrapper .input-box input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 40px;
+    font-size: 16px;
+    padding: 20px 45px 20px 20px;
+
+}
+.input-box input::placeholder {
+    color: white;
+
+}
+.wrapper .remember-forgot {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 14.5px;
+    margin: -15px 0 15px;
+    
+}
+.wrapper .btn {
+    width: 100%;
+    height: 45px;
+    background: orange;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.wrapper .register-link {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 14.5px;
+}
