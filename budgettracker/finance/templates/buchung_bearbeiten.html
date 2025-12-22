@@ -1,0 +1,46 @@
+{% extends "navbar.html" %}
+{% block navbar %}
+
+
+<form method="POST" >
+    {% csrf_token %}
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">Betrag</label>
+      <input type="text"  class="form-control" name="betrag" placeholder="Betrag" value="{{ buchung.betrag}}">
+      <small class="form-text text-muted"> Bitte Punkt als Dezimaltrennzeichen verwenden (z. B. 10.50) </small>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputState">Type</label>
+      <select id="inputState" class="form-control"  name="type">
+        <option selected>Bitte auswählen...</option>
+        <option value="income" {% if buchung.type == "income" %}selected{% endif %}>
+          Einnahme
+        </option>
+        <option value="expense" {% if buchung.type == "expense" %}selected{% endif %}>
+          Ausgabe
+        </option>
+    
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputState">Kategorie</label>
+      <select id="inputState" class="form-control" name="kategorie" >
+        <option value="{{ kategorie.pk }}" selected>{{ kategorie.name }}</option>
+        <option>...</option>
+      </select>
+    </div>
+
+  </div>
+  <div class="form-group">
+    <label for="inputAddress">Beschreibung</label>
+    <input type="text" class="form-control" name="beschreibung" placeholder="Beschreibung" value="{{ buchung.beschreibung }}">
+  </div>
+
+<div class="form-group">
+        <label for="inputDate">Datum</label>
+        <input type="date" class="form-control" name="datum" placeholder="Datum" value="{{ buchung.datum|date:'Y-m-d' }}">
+  <button type="submit" class="btn btn-primary">Speichern</button>
+</form>
+
+{% endblock navbar %}

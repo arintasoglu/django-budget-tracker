@@ -1,0 +1,83 @@
+{% extends "navbar.html" %}
+{% block navbar %}
+<div class="d-flex align-items-center justify-content-between mb-3">
+
+  <h3 class="mb-0">Meine Buchungen</h3>
+
+  <div class="d-flex gap-3">
+
+    <a href="/buchung_hinzufuegen" class="btn btn-light">
+      <span class="icon-tooltip">
+        <i class="bi bi-plus-square-fill fs-4 text-primary"></i>
+        <span class="tooltip-text">Buchung hinzufügen</span>
+      </span>
+    </a>
+
+    <a href="/buchung/export" class="btn btn-light">
+      <span class="icon-tooltip">
+        <i class="bi bi-arrow-down-circle-fill fs-4 text-primary"></i>
+        <span class="tooltip-text">Buchung exportieren</span>
+      </span>
+    </a>
+
+  </div>
+</div>
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Betrag</th>
+      <th scope="col">Type</th>
+      <th scope="col">Kategorie</th>
+      <th scope="col">Datum</th>
+      <th scope="col">Beschreibung</th>
+      <th scope="col"> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      {% if buchungen %}
+        {% for buchung in buchungen %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ buchung.betrag }}</td>
+            <td>{{ buchung.type }}</td>
+            <td>{{ buchung.kategorie }}</td>
+            <td>{{ buchung.datum }}</td>
+            <td>{{ buchung.beschreibung }}</td>
+            <td>
+           
+            <div class="d-flex gap-3">
+
+                <a href="/buchung/bearbeiten/{{ buchung.buchungId }}" class="btn btn-light">
+                <span class="icon-tooltip">
+                <i class="bi bi-pencil-square fs-4 text-primary"></i>
+                <span class="tooltip-text">Buchung bearbeiten</span>
+                </span>
+                </a>
+
+
+                <a href="/buchung/loeschen/{{ buchung.buchungId }}" class="btn btn-light">
+                <span class="icon-tooltip">
+                <i class="bi bi-trash fs-4 text-danger"></i>
+                <span class="tooltip-text">Buchung löschen</span>
+                </span>
+                </a>
+            </div>
+            </td>
+
+
+          </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="6">Keine Buchungen gefunden.</td>
+        </tr>
+      {% endif %}
+
+  </tbody>
+</table>
+
+{% endblock navbar %}

@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Buchung, Kategorie
 
-# Register your models here.
+admin.site.register(Buchung)
+admin.site.register(Kategorie)

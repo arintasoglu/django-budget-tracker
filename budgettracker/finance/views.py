@@ -1,7 +1,9 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.urls import reverse
+from .models import *
 from .forms import *
 from django.contrib.auth.forms import AuthenticationForm
 
@@ -24,7 +26,6 @@ def anmelden(request):
     return render(request, "anmelden.html", {"form": form})
 
 
-
 def registrieren(request):
     form = RegisterModelForm(request.POST or None)
     if form.is_valid():
@@ -40,3 +41,52 @@ def registrieren(request):
 def abmelden(request):
     logout(request)
     return redirect("anmelden")
+
+
+def buchung(request):
+    buchungen = Buchung.objects.filter(
+        benutzer=User.objects.get(username=request.user.get_username())
+    )
+    return render(request, "buchung.html", {"buchungen": buchungen})
+
+
+def buchung_hinzufuegen(request):
+    form = BuchungsForm(request.POST or None)
+    kategorien = Kategorie.objects.all()
+
+    if form.is_valid():
+        buchung = form.save(commit=False)
+        buchung.benutzer = request.user
+        kategorie_id = request.POST.get("kategorie")
+        buchung.kategorie = get_object_or_404(Kategorie, kategorieId=kategorie_id)
+        buchung.save()
+        return redirect("buchung")
+
+    return render(
+        request, "buchung_hinzufuegen.html", {"form": form, "kategorien": kategorien}
+    )
+
+
+def buchung_loeschen(request, id):
+    buchung = Buchung.objects.get(buchungId=id)
+    buchung.delete()
+    return redirect("buchung")
+
+
+def buchung_bearbeiten(request, id):
+    buchung = Buchung.objects.get(buchungId=id)
+    kategorie = Kategorie.objects.filter(name=buchung.kategorie).first()
+    form = BuchungsForm(request.POST or None, instance=buchung)
+    if form.is_valid():
+        a = form.save(commit=False)
+        a.benutzer = request.user
+        kategorie_id = request.POST.get("kategorie")
+        a.kategorie = get_object_or_404(Kategorie, kategorieId=kategorie_id)
+        a.save()
+        return redirect("buchung")
+
+    return render(
+        request,
+        "buchung_bearbeiten.html",
+        {"form": form, "buchung": buchung, "kategorie": kategorie},
+    )
