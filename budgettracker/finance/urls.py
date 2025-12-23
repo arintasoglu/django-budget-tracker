@@ -12,6 +12,9 @@ urlpatterns = [
     path('buchung/loeschen/<int:id>/', views.buchung_loeschen, name="buchung_loeschen"),
     path('buchung/bearbeiten/<int:id>/', views.buchung_bearbeiten, name="buchung_bearbeiten"),
     path('buchung_hinzufuegen/', views.buchung_hinzufuegen, name="buchung_hinzufuegen"),
+    path('meineKategorien/', views.kategorie, name="kategorie"),
+    path('kategorie/loeschen/<int:id>/', views.kategorie_loeschen, name="kategorie_loeschen"),
+    path('kategorie_hinzufuegen/', views.kategorie_hinzufuegen, name="kategorie_hinzufuegen"),
 
 
 ]

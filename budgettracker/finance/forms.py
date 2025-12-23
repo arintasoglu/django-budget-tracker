@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Buchung
+from .models import Buchung, Kategorie
 
 
 class RegisterModelForm(forms.ModelForm):
@@ -48,21 +48,16 @@ class BuchungsForm(forms.ModelForm):
         return beschreibung
 
 
-"""class BuchungsForm(forms.Form):
-    type = forms.CharField(max_length=10)
-    kategorie = forms.CharField(max_length=100)
-    beschreibung = forms.CharField(required=False)
-    betrag = forms.DecimalField(max_digits=10, decimal_places=2)
-    datum = forms.DateField()
+class KategorieForm(forms.ModelForm):
+    class Meta:
+        model = Kategorie
+        fields = ["name"]
 
+    def clean_name(self):
+        name = self.cleaned_data["name"]
 
-
-
-    def clean_beschreibung(self):
-        beschreibung = self.cleaned_data.get("beschreibung")
-        if len(beschreibung or "") > 200:
-            self.add_error(
-                "beschreibung", "Beschreibung darf maximal 200 Zeichen lang sein."
-            )
-        return beschreibung
-        """
+        if Kategorie.objects.filter(
+            name=name, benutzer=self.initial["benutzer"]
+        ).exists():
+            self.add_error("name", "Diese Kategorie existiert bereits.")
+        return name

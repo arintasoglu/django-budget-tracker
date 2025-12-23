@@ -1,3 +1,5 @@
+from sqlite3 import IntegrityError
+from urllib import request
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -6,6 +8,7 @@ from django.urls import reverse
 from .models import *
 from .forms import *
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models.deletion import ProtectedError
 
 
 ## View for rendering the navbar
@@ -90,3 +93,36 @@ def buchung_bearbeiten(request, id):
         "buchung_bearbeiten.html",
         {"form": form, "buchung": buchung, "kategorie": kategorie},
     )
+
+
+def kategorie(request):
+    kategorien = Kategorie.objects.filter(
+        benutzer=User.objects.get(username=request.user.get_username())
+    )
+    return render(request, "kategorie.html", {"kategorien": kategorien})
+
+
+def kategorie_hinzufuegen(request):
+    form = KategorieForm(request.POST or None, initial={"benutzer": request.user})
+    if form.is_valid():
+        kategorie = form.save(commit=False)
+        kategorie.benutzer = request.user
+        kategorie.save()
+        return redirect("kategorie")
+
+    return render(request, "kategorie_hinzufuegen.html", {"form": form})
+
+
+def kategorie_loeschen(request, id):
+    kategorie = Kategorie.objects.get(kategorieId=id)
+    try:
+        kategorie.delete()
+        messages.success(request, "Kategorie wurde gelöscht.")
+    except ProtectedError:
+        messages.error(
+            request,
+            "Diese Kategorie kann nicht gelöscht werden, "
+            "da noch Buchungen vorhanden sind."
+        )
+
+    return redirect("kategorie")
