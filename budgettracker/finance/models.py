@@ -23,11 +23,11 @@ class Buchung(models.Model):
 
 class Kategorie(models.Model):
     kategorieId = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100, unique=True)
-    beschreibung = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=100)
     benutzer = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
+        unique_together = ("benutzer", "name")
         verbose_name_plural = "Kategorien"
 
     def __str__(self):

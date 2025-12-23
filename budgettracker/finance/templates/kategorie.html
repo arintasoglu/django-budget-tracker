@@ -1,0 +1,60 @@
+{% extends "navbar.html" %}
+{% block navbar %}
+<div class="d-flex align-items-center justify-content-between mb-3">
+
+  <h3 class="mb-0">Meine Kategorien</h3>
+
+  <div class="d-flex gap-3">
+
+    <a href="/kategorie_hinzufuegen" class="btn btn-light">
+      <span class="icon-tooltip">
+        <i class="bi bi-plus-square-fill fs-4 text-primary"></i>
+        <span class="tooltip-text">Kategorie hinzufügen</span>
+      </span>
+    </a>
+
+  </div>
+</div>
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col"> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      {% if kategorien %}
+        {% for kategorie in kategorien %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ kategorie.name }}</td>
+            <td>
+           
+            <div class="d-flex gap-3">
+
+                <a href="/kategorie/loeschen/{{ kategorie.kategorieId }}" class="btn btn-light">
+                <span class="icon-tooltip">
+                <i class="bi bi-trash fs-4 text-danger"></i>
+                <span class="tooltip-text">Kategorie löschen</span>
+                </span>
+                </a>
+            </div>
+            </td>
+
+
+          </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="6">Keine Buchungen gefunden.</td>
+        </tr>
+      {% endif %}
+
+  </tbody>
+</table>
+
+{% endblock navbar %}
