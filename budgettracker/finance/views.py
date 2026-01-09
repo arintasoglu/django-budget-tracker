@@ -1,5 +1,6 @@
 from sqlite3 import IntegrityError
 from urllib import request
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -9,6 +10,7 @@ from .models import *
 from .forms import *
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models.deletion import ProtectedError
+from .resources import BuchungResource
 
 
 ## View for rendering the navbar
@@ -122,7 +124,18 @@ def kategorie_loeschen(request, id):
         messages.error(
             request,
             "Diese Kategorie kann nicht gelöscht werden, "
-            "da noch Buchungen vorhanden sind."
+            "da noch Buchungen vorhanden sind.",
         )
 
     return redirect("kategorie")
+
+
+def export_buchungen(request):
+    buchungen = Buchung.objects.filter(
+        benutzer=User.objects.get(username=request.user.get_username())
+    )
+    dataset = BuchungResource().export(buchungen)
+    csv_data = dataset.export("csv", delimiter=";")
+    response = HttpResponse(csv_data, content_type="text/csv")
+    response["Content-Disposition"] = 'attachment; filename="buchungen.csv"'
+    return response
