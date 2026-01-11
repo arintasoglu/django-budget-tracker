@@ -16,6 +16,7 @@ urlpatterns = [
     path('kategorie/loeschen/<int:id>/', views.kategorie_loeschen, name="kategorie_loeschen"),
     path('kategorie_hinzufuegen/', views.kategorie_hinzufuegen, name="kategorie_hinzufuegen"),
     path('meineBuchungen/export_buchungen/', views.export_buchungen, name="export_buchungen"),
+    path('diagramme/', views.diagramme, name="diagramme"),
 
 
 ]

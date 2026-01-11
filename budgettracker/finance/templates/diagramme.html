@@ -1,0 +1,8 @@
+{% extends "navbar.html" %}
+{% block navbar %}
+<h3 class="mb-3">Auswertungen</h3>
+ {{ chart|safe }}
+ {{ pie_chart|safe }}
+ {{ pie_chart_expense|safe }}
+       
+{% endblock navbar %}

@@ -11,6 +11,11 @@ from .forms import *
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models.deletion import ProtectedError
 from .resources import BuchungResource
+from .chart import (
+    generate_expense_income_chart,
+    generate_pie_income_chart,
+    generate_pie_expense_chart,
+)
 
 
 ## View for rendering the navbar
@@ -139,3 +144,55 @@ def export_buchungen(request):
     response = HttpResponse(csv_data, content_type="text/csv")
     response["Content-Disposition"] = 'attachment; filename="buchungen.csv"'
     return response
+
+
+def diagramme(request):
+    kategorien = Kategorie.objects.filter(
+        benutzer=User.objects.get(username=request.user.get_username())
+    )
+    buchungs_in = Buchung.objects.filter(
+        benutzer=User.objects.get(username=request.user.get_username()), type="income"
+    )
+    buchungs_ex = Buchung.objects.filter(
+        benutzer=User.objects.get(username=request.user.get_username()), type="expense"
+    )
+    for buch in buchungs_ex:
+        sum_expense = sum(buch.betrag for buch in buchungs_ex)
+    for buch in buchungs_in:
+        sum_income = sum(buch.betrag for buch in buchungs_in)
+
+    chart = generate_expense_income_chart(sum_expense, sum_income)
+
+    context = {}
+    for kategorie in kategorien:
+
+        buchungen_income = Buchung.objects.filter(
+            benutzer=User.objects.get(username=request.user.get_username()),
+            kategorie=kategorie,
+            type="income",
+        )
+        buchungen_expense = Buchung.objects.filter(
+            benutzer=User.objects.get(username=request.user.get_username()),
+            kategorie=kategorie,
+            type="expense",
+        )
+        total_income = sum(buchung.betrag for buchung in buchungen_income)
+        total_expense = sum(buchung.betrag for buchung in buchungen_expense)
+        context[kategorie.name] = {
+            "kategorie": kategorie.name,
+            "income": total_income,
+            "expense": total_expense,
+        }
+
+    pie_chart = generate_pie_income_chart(context)
+    pie_chart_expense = generate_pie_expense_chart(context)
+
+    return render(
+        request,
+        "diagramme.html",
+        {
+            "chart": chart.to_html(),
+            "pie_chart": pie_chart.to_html(),
+            "pie_chart_expense": pie_chart_expense.to_html(),
+        },
+    )
