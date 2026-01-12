@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block head %} {% load static %}
+<link rel="stylesheet" href="{% static 'registrieren.css' %}" />
+{% endblock %}
+
+{% block template %}
+ <div class="wrapper">
+      <h2>Passwort zurücksetzen</h2>
+    <p>Passwort vergessen? Kein Problem! Bitte geben Sie unten Ihre E-Mail-Adresse ein. Wir senden Ihnen umgehend einen Link zu, mit dem Sie Ihr Passwort sicher zurücksetzen können.</p>
+
+    <form method="POST" action="{% url 'passwort_zuruecksetzen' %}">
+
+         {% csrf_token %}
+
+        <div class="input-box">
+           <input type="email" placeholder="E-Mail" name="email" required>
+        </div>
+
+
+          <button type="submit" class="btn btn-primary">Senden</button>
+
+
+{% endblock template %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block head %} {% load static %}
+<link rel="stylesheet" href="{% static 'registrieren.css' %}" />
+{% endblock %}
+
+{% block template %}
+{% if validlink %}
+  <form  method="POST">
+    {% csrf_token %}
+
+    <div class="form-group mb-4">
+         {{ form.new_password1.errors }}
+      <label for="exampleInputPassword1">Neues Passwort</label>
+      <input type="password" class="form-control" placeholder="Neues Passwort" name="new_password1">
+      <small id="emailHelp" class="form-text text-muted">Neues Passwort</small>
+    </div>
+    <div class="form-group mb-4">
+            {{ form.new_password2.errors }}
+        <label for="exampleInputPassword1">Neues Passwort</label>
+        <input type="password" class="form-control"  placeholder="Neues Passwort" name="new_password2">
+        <small id="emailHelp" class="form-text text-muted">Neues Passwort erneut eingeben</small>
+    </div>
+    <button type="submit" class="btn btn-primary mb-4">neues Passwort bestätigen</button>
+  </form>
+{% else %}
+    <p>Der Link zum Zurücksetzen des Passworts ist ungültig, möglicherweise weil er bereits verwendet wurde. Bitte fordern Sie einen neuen Link zum Zurücksetzen des Passworts an.</p>
+    {% endif %}
+{% endblock template %}

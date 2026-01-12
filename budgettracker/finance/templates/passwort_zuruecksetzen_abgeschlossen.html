@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block head %} {% load static %}
+<link rel="stylesheet" href="{% static 'registrieren.css' %}" />
+{% endblock %}
+
+{% block template %}
+<p>Ihr Passwort wurde erfolgreich zurückgesetzt! Sie können nun zur 
+    <a href="{%url 'anmelden'%}">Anmeldeseite</a> gehen und sich mit Ihrem neuen Passwort einloggen.</p>
+
+{% endblock template %}
