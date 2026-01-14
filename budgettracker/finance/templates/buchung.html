@@ -38,8 +38,8 @@
   </thead>
   <tbody>
     <tr>
-      {% if buchungen %}
-        {% for buchung in buchungen %}
+      {% if page_obj %}
+        {% for buchung in page_obj %}
           <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td>{{ buchung.betrag }}</td>
@@ -79,5 +79,6 @@
 
   </tbody>
 </table>
+{% include "pagination.html" %}
 
 {% endblock navbar %}

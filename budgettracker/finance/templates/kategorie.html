@@ -27,8 +27,8 @@
   </thead>
   <tbody>
     <tr>
-      {% if kategorien %}
-        {% for kategorie in kategorien %}
+      {% if page_obj %}
+        {% for kategorie in page_obj %}
           <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td>{{ kategorie.name }}</td>
@@ -50,7 +50,7 @@
         {% endfor %}
       {% else %}
         <tr>
-          <td colspan="6">Keine Buchungen gefunden.</td>
+          <td colspan="6">Keine Kategorien gefunden.</td>
         </tr>
       {% endif %}
 

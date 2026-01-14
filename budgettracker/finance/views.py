@@ -16,6 +16,7 @@ from .chart import (
     generate_pie_income_chart,
     generate_pie_expense_chart,
 )
+from django.core.paginator import Paginator
 
 
 ## View for rendering the navbar
@@ -57,8 +58,10 @@ def buchung(request):
     buchungen = Buchung.objects.filter(
         benutzer=User.objects.get(username=request.user.get_username())
     )
-    return render(request, "buchung.html", {"buchungen": buchungen})
-
+    paginator = Paginator(buchungen, 8) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, "buchung.html", {"page_obj": page_obj})
 
 def buchung_hinzufuegen(request):
     form = BuchungsForm(request.POST or None)
@@ -106,7 +109,10 @@ def kategorie(request):
     kategorien = Kategorie.objects.filter(
         benutzer=User.objects.get(username=request.user.get_username())
     )
-    return render(request, "kategorie.html", {"kategorien": kategorien})
+    paginator = Paginator(kategorien, 8) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, "kategorie.html", {"page_obj": page_obj})
 
 
 def kategorie_hinzufuegen(request):
