@@ -58,10 +58,41 @@ def buchung(request):
     buchungen = Buchung.objects.filter(
         benutzer=User.objects.get(username=request.user.get_username())
     )
-    paginator = Paginator(buchungen, 8) 
-    page_number = request.GET.get('page')
+    kategorien = Kategorie.objects.filter(
+        benutzer=User.objects.get(username=request.user.get_username())
+    )
+    kategorie_filter = request.GET.getlist("kategorieFilter")
+    type_filter = request.GET.getlist("typeFilter")
+    date_from = request.GET.get("dateFrom")
+    date_to = request.GET.get("dateTo")
+    if date_from:
+        buchungen = buchungen.filter(datum__gte=date_from)
+    if date_to:
+        buchungen = buchungen.filter(datum__lte=date_to)
+    if type_filter:
+        buchungen = buchungen.filter(type__in=type_filter)
+    if kategorie_filter:
+        buchungen = buchungen.filter(kategorie_id__in=kategorie_filter)
+
+    params = request.GET.copy()
+    params.pop("page", None)
+    extra_qs = ""
+    if params:
+        extra_qs = "&" + params.urlencode()
+
+    paginator = Paginator(buchungen, 8)
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    return render(request, "buchung.html", {"page_obj": page_obj})
+    return render(
+        request,
+        "buchung.html",
+        {
+            "page_obj": page_obj,
+            "kategorien": kategorien,
+            "extra_qs": extra_qs,
+        },
+    )
+
 
 def buchung_hinzufuegen(request):
     form = BuchungsForm(request.POST or None)
@@ -109,8 +140,8 @@ def kategorie(request):
     kategorien = Kategorie.objects.filter(
         benutzer=User.objects.get(username=request.user.get_username())
     )
-    paginator = Paginator(kategorien, 8) 
-    page_number = request.GET.get('page')
+    paginator = Paginator(kategorien, 8)
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     return render(request, "kategorie.html", {"page_obj": page_obj})
 

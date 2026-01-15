@@ -1,11 +1,10 @@
 {% extends "navbar.html" %}
+
 {% block navbar %}
 <div class="d-flex align-items-center justify-content-between mb-3">
-
   <h3 class="mb-0">Meine Buchungen</h3>
 
   <div class="d-flex gap-3">
-
     <a href="/buchung_hinzufuegen" class="btn btn-light">
       <span class="icon-tooltip">
         <i class="bi bi-plus-square-fill fs-4 text-primary"></i>
@@ -19,66 +18,81 @@
         <span class="tooltip-text">Buchung exportieren</span>
       </span>
     </a>
-
   </div>
 </div>
 
+<div class="row g-3 align-items-start">
 
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Betrag</th>
-      <th scope="col">Type</th>
-      <th scope="col">Kategorie</th>
-      <th scope="col">Datum</th>
-      <th scope="col">Beschreibung</th>
-      <th scope="col"> </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      {% if page_obj %}
-        {% for buchung in page_obj %}
-          <tr>
-            <th scope="row">{{ forloop.counter }}</th>
-            <td>{{ buchung.betrag }}</td>
-            <td>{{ buchung.type }}</td>
-            <td>{{ buchung.kategorie }}</td>
-            <td>{{ buchung.datum }}</td>
-            <td>{{ buchung.beschreibung }}</td>
-            <td>
-           
-            <div class="d-flex gap-3">
+  <section class="col-12 col-lg-9 order-2 order-lg-1">
+    <div class="card shadow-sm">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0 align-middle">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Betrag</th>
+                <th scope="col">Type</th>
+                <th scope="col">Kategorie</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Beschreibung</th>
+                <th scope="col" class="text-end">Aktionen</th>
+              </tr>
+            </thead>
 
-                <a href="/buchung/bearbeiten/{{ buchung.buchungId }}" class="btn btn-light">
-                <span class="icon-tooltip">
-                <i class="bi bi-pencil-square fs-4 text-primary"></i>
-                <span class="tooltip-text">Buchung bearbeiten</span>
-                </span>
-                </a>
+            <tbody>
+              {% if page_obj %}
+                {% for buchung in page_obj %}
+                  <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ buchung.betrag }}</td>
+                    <td>{{ buchung.type }}</td>
+                    <td>{{ buchung.kategorie }}</td>
+                    <td>{{ buchung.datum }}</td>
+                    <td>{{ buchung.beschreibung }}</td>
+                    <td class="text-end">
+                      <div class="d-inline-flex gap-2">
+                        <a href="/buchung/bearbeiten/{{ buchung.buchungId }}" class="btn btn-light">
+                          <span class="icon-tooltip">
+                            <i class="bi bi-pencil-square fs-4 text-primary"></i>
+                            <span class="tooltip-text">Buchung bearbeiten</span>
+                          </span>
+                        </a>
+
+                        <a href="/buchung/loeschen/{{ buchung.buchungId }}" class="btn btn-light">
+                          <span class="icon-tooltip">
+                            <i class="bi bi-trash fs-4 text-danger"></i>
+                            <span class="tooltip-text">Buchung löschen</span>
+                          </span>
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="7" class="text-center py-4 text-muted">
+                    Keine Buchungen gefunden.
+                  </td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
 
 
-                <a href="/buchung/loeschen/{{ buchung.buchungId }}" class="btn btn-light">
-                <span class="icon-tooltip">
-                <i class="bi bi-trash fs-4 text-danger"></i>
-                <span class="tooltip-text">Buchung löschen</span>
-                </span>
-                </a>
-            </div>
-            </td>
+  <aside class="col-12 col-lg-3 order-1 order-lg-2">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        {% include "filters.html" %}
+      </div>
+    </div>
+  </aside>
+</div>
 
-
-          </tr>
-        {% endfor %}
-      {% else %}
-        <tr>
-          <td colspan="6">Keine Buchungen gefunden.</td>
-        </tr>
-      {% endif %}
-
-  </tbody>
-</table>
 {% include "pagination.html" %}
-
 {% endblock navbar %}
+
