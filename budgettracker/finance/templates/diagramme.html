@@ -1,8 +1,28 @@
 {% extends "navbar.html" %}
+{% block head %} {% load static %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'diagramme.css' %}">
+{% endblock %}
+
+
 {% block navbar %}
 <h3 class="mb-3">Auswertungen</h3>
  {{ chart|safe }}
- {{ pie_chart|safe }}
- {{ pie_chart_expense|safe }}
+
+<div class="chart-section">
+    {% if pie_chart %}
+        {{ pie_chart|safe }}
+    {% else %}
+        <p class="no-data">Keine Einnahmen vorhanden.</p>
+    {% endif %}
+</div>
+
+<div class="chart-section">
+    {% if pie_chart_expense %}
+        {{ pie_chart_expense|safe }}
+    {% else %}
+        <p class="no-data">Keine Ausgaben vorhanden.</p>
+    {% endif %}
+</div>
        
 {% endblock navbar %}

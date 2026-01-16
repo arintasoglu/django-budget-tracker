@@ -1,0 +1,13 @@
+.chart-section {
+    margin: 40px 0;       
+    min-height: 200px;     
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.no-data {
+    color: #777;
+    font-style: italic;
+    font-size: 0.95rem;
+}

@@ -17,6 +17,7 @@ from .chart import (
     generate_pie_expense_chart,
 )
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 
 ## View for rendering the navbar
@@ -49,11 +50,13 @@ def registrieren(request):
     return render(request, "registrieren.html", {"form": form})
 
 
+@login_required(login_url="anmelden")
 def abmelden(request):
     logout(request)
     return redirect("anmelden")
 
 
+@login_required(login_url="anmelden")
 def buchung(request):
     buchungen = Buchung.objects.filter(
         benutzer=User.objects.get(username=request.user.get_username())
@@ -94,9 +97,12 @@ def buchung(request):
     )
 
 
+@login_required(login_url="anmelden")
 def buchung_hinzufuegen(request):
     form = BuchungsForm(request.POST or None)
-    kategorien = Kategorie.objects.all()
+    kategorien = Kategorie.objects.filter(
+        benutzer=User.objects.get(username=request.user.get_username())
+    )
 
     if form.is_valid():
         buchung = form.save(commit=False)
@@ -111,12 +117,14 @@ def buchung_hinzufuegen(request):
     )
 
 
+@login_required(login_url="anmelden")
 def buchung_loeschen(request, id):
     buchung = Buchung.objects.get(buchungId=id)
     buchung.delete()
     return redirect("buchung")
 
 
+@login_required(login_url="anmelden")
 def buchung_bearbeiten(request, id):
     buchung = Buchung.objects.get(buchungId=id)
     kategorie = Kategorie.objects.filter(name=buchung.kategorie).first()
@@ -136,6 +144,7 @@ def buchung_bearbeiten(request, id):
     )
 
 
+@login_required(login_url="anmelden")
 def kategorie(request):
     kategorien = Kategorie.objects.filter(
         benutzer=User.objects.get(username=request.user.get_username())
@@ -146,6 +155,7 @@ def kategorie(request):
     return render(request, "kategorie.html", {"page_obj": page_obj})
 
 
+@login_required(login_url="anmelden")
 def kategorie_hinzufuegen(request):
     form = KategorieForm(request.POST or None, initial={"benutzer": request.user})
     if form.is_valid():
@@ -157,6 +167,7 @@ def kategorie_hinzufuegen(request):
     return render(request, "kategorie_hinzufuegen.html", {"form": form})
 
 
+@login_required(login_url="anmelden")
 def kategorie_loeschen(request, id):
     kategorie = Kategorie.objects.get(kategorieId=id)
     try:
@@ -172,6 +183,7 @@ def kategorie_loeschen(request, id):
     return redirect("kategorie")
 
 
+@login_required(login_url="anmelden")
 def export_buchungen(request):
     buchungen = Buchung.objects.filter(
         benutzer=User.objects.get(username=request.user.get_username())
@@ -183,6 +195,7 @@ def export_buchungen(request):
     return response
 
 
+@login_required(login_url="anmelden")
 def diagramme(request):
     kategorien = Kategorie.objects.filter(
         benutzer=User.objects.get(username=request.user.get_username())
@@ -193,14 +206,14 @@ def diagramme(request):
     buchungs_ex = Buchung.objects.filter(
         benutzer=User.objects.get(username=request.user.get_username()), type="expense"
     )
-    for buch in buchungs_ex:
-        sum_expense = sum(buch.betrag for buch in buchungs_ex)
-    for buch in buchungs_in:
-        sum_income = sum(buch.betrag for buch in buchungs_in)
+
+    sum_expense = sum(b.betrag for b in buchungs_ex)
+    sum_income = sum(b.betrag for b in buchungs_in)
 
     chart = generate_expense_income_chart(sum_expense, sum_income)
 
     context = {}
+
     for kategorie in kategorien:
 
         buchungen_income = Buchung.objects.filter(
@@ -220,16 +233,25 @@ def diagramme(request):
             "income": total_income,
             "expense": total_expense,
         }
+    pie_chart = None
+    pie_chart_expense = None
+    has_income_data = any(v["income"] > 0 for v in context.values())
+    has_expense_data = any(v["expense"] > 0 for v in context.values())
 
-    pie_chart = generate_pie_income_chart(context)
-    pie_chart_expense = generate_pie_expense_chart(context)
+    if has_income_data:
+       pie_chart = generate_pie_income_chart(context)
+    if has_expense_data:
+        pie_chart_expense = generate_pie_expense_chart(context)
+    
+    pie_chart_html = pie_chart.to_html() if pie_chart else None
+    pie_chart_expense_html = pie_chart_expense.to_html() if pie_chart_expense else None
 
     return render(
         request,
         "diagramme.html",
         {
             "chart": chart.to_html(),
-            "pie_chart": pie_chart.to_html(),
-            "pie_chart_expense": pie_chart_expense.to_html(),
+            "pie_chart": pie_chart_html,
+            "pie_chart_expense": pie_chart_expense_html,
         },
     )
