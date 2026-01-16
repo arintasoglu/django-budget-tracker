@@ -20,10 +20,33 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 
 
-## View for rendering the navbar
-## dummy
-def navbar(request):
-    return render(request, "navbar.html")
+@login_required(login_url="anmelden")
+def übersicht(request):
+    total_income = (
+        Buchung.objects.filter(
+            benutzer=User.objects.get(username=request.user.get_username()),
+            type="income",
+        ).aggregate(total_amount=models.Sum("betrag"))["total_amount"]
+        or 0
+    )
+    total_expense = (
+        Buchung.objects.filter(
+            benutzer=User.objects.get(username=request.user.get_username()),
+            type="expense",
+        ).aggregate(total_amount=models.Sum("betrag"))["total_amount"]
+        or 0
+    )
+    
+
+    recent_buchungen = Buchung.objects.filter(
+        benutzer=User.objects.get(username=request.user.get_username())
+    ).order_by("-datum")[:5]
+
+    return render(
+        request,
+        "dashboard.html",
+        {"total_income": total_income, "total_expense": total_expense , "recent_buchungen": recent_buchungen},
+    )
 
 
 def anmelden(request):
@@ -34,7 +57,7 @@ def anmelden(request):
         benutzer = authenticate(request, username=benutzername, password=passwort)
         if benutzer is not None:
             login(request, benutzer)
-            return redirect("navbar")
+            return redirect("übersicht")
     return render(request, "anmelden.html", {"form": form})
 
 
@@ -46,7 +69,7 @@ def registrieren(request):
             request, "Registrierung erfolgreich. Sie können sich jetzt anmelden."
         )
         login(request, benutzer)
-        return redirect("navbar")
+        return redirect("übersicht")
     return render(request, "registrieren.html", {"form": form})
 
 
@@ -239,10 +262,10 @@ def diagramme(request):
     has_expense_data = any(v["expense"] > 0 for v in context.values())
 
     if has_income_data:
-       pie_chart = generate_pie_income_chart(context)
+        pie_chart = generate_pie_income_chart(context)
     if has_expense_data:
         pie_chart_expense = generate_pie_expense_chart(context)
-    
+
     pie_chart_html = pie_chart.to_html() if pie_chart else None
     pie_chart_expense_html = pie_chart_expense.to_html() if pie_chart_expense else None
 

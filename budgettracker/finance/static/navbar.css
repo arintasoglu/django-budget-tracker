@@ -14,15 +14,15 @@ li {
 
 
 }
-a {
-    text-decoration: none;
-    color: #fff;
-    font-size: 20px;
+.navbar a {
+  color: #fff;
+  text-decoration: none;
 }
-/* linklere efekt icin kullanir üstüne gelince renk degisir */
-a:hover {
-    color: #ff6347;
+
+.navbar a:hover {
+  text-decoration: underline;
 }
+
 header {
     position: relative;
     padding: 0 2rem;

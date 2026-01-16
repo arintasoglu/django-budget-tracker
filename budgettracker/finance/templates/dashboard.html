@@ -1,0 +1,159 @@
+{% extends "navbar.html" %}
+{% block head %} {% load static %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+{% endblock %}
+
+{% block navbar %}
+<div class="container py-3">
+
+
+
+  <!-- KPI Cards -->
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-md-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div>
+            <div class="text-muted small">Gesamteinnahmen</div>
+            <div class="fs-2 fw-semibold">{{ total_income }}</div>
+          </div>
+          <div class="kpi-icon kpi-income">
+            <i class="bi bi-arrow-up-right fs-4 text-primary"></i>
+          </div>
+        </div>
+        <div class="card-footer bg-white border-0 pt-0">
+          <span class="badge text-bg-primary">Einnahmen</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div>
+            <div class="text-muted small">Gesamtausgaben</div>
+            <div class="fs-2 fw-semibold">{{ total_expense }}</div>
+          </div>
+          <div class="kpi-icon kpi-expense">
+            <i class="bi bi-arrow-down-right fs-4 text-danger"></i>
+          </div>
+        </div>
+        <div class="card-footer bg-white border-0 pt-0">
+          <span class="badge text-bg-danger">Ausgaben</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row g-3">
+
+    
+    <div class="col-12 col-lg-7">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <span class="fw-semibold">Letzte Buchungen</span>
+          <a href="{% url 'buchung' %}" class="small text-decoration-none">Siehe alle</a>
+        </div>
+
+        <div class="card-body p-0">
+          <ul class="list-group list-group-flush">
+            {% for buchung in recent_buchungen %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="me-3">
+                  <div class="fw-semibold">
+                    {{ buchung.beschreibung|default:"(ohne Beschreibung)" }}
+                  </div>
+                  <div class="text-muted small">
+                    {{ buchung.datum }} · {{ buchung.kategorie }}
+                  </div>
+                </div>
+
+                <div class="text-end">
+                  <div class="fw-semibold">{{ buchung.betrag }}</div>
+                  <span class="badge {% if buchung.type == 'income' %}text-bg-primary{% else %}text-bg-danger{% endif %}">
+                    {{ buchung.get_type_display }}
+                  </span>
+                </div>
+              </li>
+            {% empty %}
+              <li class="list-group-item text-muted">
+                Keine Buchungen vorhanden.
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+ 
+<div class="col-12 col-lg-5">
+  <div class="card border-0 shadow-sm h-100">
+
+
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <div>
+        <div class="fw-semibold">Diagramm</div>
+        <div class="text-muted small">Einnahmen / Ausgaben Übersicht</div>
+      </div>
+
+      <a href="{% url 'diagramme' %}"
+         class="small text-decoration-none fw-semibold">
+        Zu den Diagrammen 
+      </a>
+    </div>
+
+
+    <div class="card-body">
+    <div class="chart-container">
+        <canvas id="incomeExpenseChart"></canvas>
+    </div>
+    </div>
+
+
+  </div>
+</div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const canvas = document.getElementById('incomeExpenseChart');
+  if (canvas) {
+    new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: ['Einnahmen', 'Ausgaben'],
+        datasets: [{
+        
+          data:  [{{ total_income|stringformat:"f" }}, {{ total_expense|stringformat:"f" }}],
+          backgroundColor: [
+            'rgba(13,110,253,.6)',
+            'rgba(220,53,69,.6)'
+          ],
+          borderColor: [
+            'rgba(13,110,253,1)',
+            'rgba(220,53,69,1)'
+          ],
+          borderWidth: 1
+        }]
+
+      },
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true }
+        },
+        plugins: { legend: { display: false } }
+      }
+
+    });
+  }
+</script>
+
+
+{% endblock navbar %}

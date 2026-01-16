@@ -7,7 +7,7 @@ urlpatterns = [
     path("", views.anmelden, name="anmelden"),
     path("registrieren/", views.registrieren, name="registrieren"),
     path("abmelden/", views.abmelden, name="abmelden"),
-    path("navbar/", views.navbar, name="navbar"),
+    path("übersicht/", views.übersicht, name="übersicht"),
     path("meineBuchungen/", views.buchung, name="buchung"),
     path("buchung/loeschen/<int:id>/", views.buchung_loeschen, name="buchung_loeschen"),
     path(

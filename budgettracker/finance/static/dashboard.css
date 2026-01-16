@@ -1,0 +1,39 @@
+
+.kpi-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kpi-income {
+  background: rgba(13, 110, 253, 0.12);
+}
+
+.kpi-expense {
+  background: rgba(220, 53, 69, 0.12);
+}
+
+
+.chart-placeholder {
+  height: 260px;
+  background-color: var(--bs-light);
+  border: 1px dashed var(--bs-border-color);
+  border-radius: .5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--bs-secondary-color);
+}
+
+.content-link {
+  color: var(--bs-link-color);
+  text-decoration: none;
+}
+
+.content-link:hover {
+  text-decoration: underline;
+}
