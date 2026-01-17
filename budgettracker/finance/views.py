@@ -18,6 +18,7 @@ from .chart import (
 )
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 
 @login_required(login_url="anmelden")
@@ -36,7 +37,6 @@ def übersicht(request):
         ).aggregate(total_amount=models.Sum("betrag"))["total_amount"]
         or 0
     )
-    
 
     recent_buchungen = Buchung.objects.filter(
         benutzer=User.objects.get(username=request.user.get_username())
@@ -45,7 +45,11 @@ def übersicht(request):
     return render(
         request,
         "dashboard.html",
-        {"total_income": total_income, "total_expense": total_expense , "recent_buchungen": recent_buchungen},
+        {
+            "total_income": total_income,
+            "total_expense": total_expense,
+            "recent_buchungen": recent_buchungen,
+        },
     )
 
 
@@ -100,6 +104,8 @@ def buchung(request):
     if kategorie_filter:
         buchungen = buchungen.filter(kategorie_id__in=kategorie_filter)
 
+    buchungen = buchungen.order_by("-datum", "-buchungId")
+
     params = request.GET.copy()
     params.pop("page", None)
     extra_qs = ""
@@ -142,14 +148,14 @@ def buchung_hinzufuegen(request):
 
 @login_required(login_url="anmelden")
 def buchung_loeschen(request, id):
-    buchung = Buchung.objects.get(buchungId=id)
+    buchung = get_object_or_404(Buchung, buchungId=id, benutzer=request.user)
     buchung.delete()
     return redirect("buchung")
 
 
 @login_required(login_url="anmelden")
 def buchung_bearbeiten(request, id):
-    buchung = Buchung.objects.get(buchungId=id)
+    buchung = get_object_or_404(Buchung, buchungId=id, benutzer=request.user)
     kategorie = Kategorie.objects.filter(name=buchung.kategorie).first()
     form = BuchungsForm(request.POST or None, instance=buchung)
     if form.is_valid():
@@ -192,7 +198,7 @@ def kategorie_hinzufuegen(request):
 
 @login_required(login_url="anmelden")
 def kategorie_loeschen(request, id):
-    kategorie = Kategorie.objects.get(kategorieId=id)
+    kategorie = get_object_or_404(Kategorie, kategorieId=id, benutzer=request.user)
     try:
         kategorie.delete()
         messages.success(request, "Kategorie wurde gelöscht.")

@@ -18,7 +18,7 @@ class Buchung(models.Model):
         verbose_name_plural = "Buchungen"
 
     def __str__(self):
-        return f"{self.beschreibung} - {self.betrag} am {self.datum}"
+        return f"{self.beschreibung} - {self.betrag:.2f} am {self.datum}"
 
 
 class Kategorie(models.Model):
