@@ -7,7 +7,7 @@
   <div class="d-flex gap-3">
     <a href="/buchung_hinzufuegen" class="btn btn-light">
       <span class="icon-tooltip">
-        <i class="bi bi-plus-square-fill fs-4 text-primary"></i>
+        <i class="bi bi-plus-circle-fill fs-4 text-primary"></i>
         <span class="tooltip-text">Buchung hinzufügen</span>
       </span>
     </a>
@@ -30,7 +30,7 @@
           <table class="table table-hover mb-0 align-middle">
             <thead class="table-light">
               <tr>
-                <th scope="col">#</th>
+               
                 <th scope="col">Betrag</th>
                 <th scope="col">Type</th>
                 <th scope="col">Kategorie</th>
@@ -44,7 +44,6 @@
               {% if page_obj %}
                 {% for buchung in page_obj %}
                   <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
                     <td>{{ buchung.betrag }}</td>
                     <td>{{ buchung.type }}</td>
                     <td>{{ buchung.kategorie }}</td>

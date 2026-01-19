@@ -2,14 +2,20 @@ import plotly.express as px
 
 
 def generate_expense_income_chart(total_expense, total_income):
-    x_data = ["Ausgaben", "Einnahmen"]
-    y_data = [total_expense, total_income]
+    x_data = ["Einnahmen", "Ausgaben"]
+    y_data = [total_income, total_expense]
     fig = px.bar(
         x=x_data,
         y=y_data,
         title="Einnahmen vs. Ausgaben",
         labels={"x": "Typ", "y": "Betrag"},
+        color=x_data,
+        color_discrete_map={
+            "Einnahmen": "#2ecc71",
+            "Ausgaben": "#e74c3c",
+        },
     )
+    fig.update_layout(legend_title_text="Typ")
 
     return fig
 

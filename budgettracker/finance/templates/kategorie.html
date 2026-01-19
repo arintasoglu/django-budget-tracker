@@ -1,28 +1,33 @@
 {% extends "navbar.html" %}
+{% block head %} {% load static %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'kategorie.css' %}">
+{% endblock %}
 {% block navbar %}
-<div class="d-flex align-items-center justify-content-between mb-3">
+
+<div class="page-wrapper">
+<div class="page-header">
 
   <h3 class="mb-0">Meine Kategorien</h3>
 
-  <div class="d-flex gap-3">
 
-    <a href="/kategorie_hinzufuegen" class="btn btn-light">
-      <span class="icon-tooltip">
-        <i class="bi bi-plus-square-fill fs-4 text-primary"></i>
+
+    <a href="/kategorie_hinzufuegen" class="action-btn">
+      <span class="icon-tooltip --primary">
+        <i class="bi bi-plus-circle-fill fs-4 text-white"></i>
         <span class="tooltip-text">Kategorie hinzufügen</span>
       </span>
     </a>
 
-  </div>
 </div>
 
 
-<table class="table table-hover">
+<table class="custom-table">
   <thead>
     <tr>
-      <th scope="col">#</th>
+     
       <th scope="col">Name</th>
-      <th scope="col"> </th>
+      <th scope="col">Aktionen</th>
     </tr>
   </thead>
   <tbody>
@@ -30,7 +35,7 @@
       {% if page_obj %}
         {% for kategorie in page_obj %}
           <tr>
-            <th scope="row">{{ forloop.counter }}</th>
+           
             <td>{{ kategorie.name }}</td>
             <td>
            

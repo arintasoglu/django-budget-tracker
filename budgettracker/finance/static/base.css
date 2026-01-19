@@ -1,0 +1,15 @@
+.page-layout {
+  align-items: center;
+  flex-direction: column; 
+  gap: 20px; 
+}
+
+.errors {
+  width: 100%;
+  max-width: 420px;
+  display: flex;              
+  justify-content: center;    
+  align-items: center;       
+  gap: 10px;                 
+  margin: 10px auto;            
+}

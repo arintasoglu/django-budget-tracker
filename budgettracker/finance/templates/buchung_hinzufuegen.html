@@ -1,53 +1,60 @@
 {% extends "navbar.html" %}
+{% block head %} {% load static %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'buchung_hinzufuegen.css' %}">
+{% endblock %}
 {% block navbar %}
 
+<div class="form-wrapper">
+  <h2>Neue Buchung hinzufügen</h2>
 
-<form method="POST" >
+  <form method="POST">
     {% csrf_token %}
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputCity">Betrag</label>
-      <input   type="text" class="form-control" name="betrag" placeholder="Betrag" >
-      <small class="form-text text-muted"> Bitte Punkt als Dezimaltrennzeichen verwenden (z. B. 10.50) </small>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label>Betrag</label>
+        <input type="text" class="form-control" name="betrag" placeholder="z. B. 10.50">
+        <small class="form-text">
+          Bitte Punkt als Dezimaltrennzeichen verwenden (z. B. 10.50)
+        </small>
+      </div>
+
+      <div class="form-group col-md-2">
+        <label>Typ</label>
+        <select class="form-control type-select" name="type" required>
+          <option value="">Bitte auswählen…</option>
+          <option value="income">Einnahme</option>
+          <option value="expense">Ausgabe</option>
+        </select>
+      </div>
+
+      <div class="form-group col-md-4">
+        <label>Kategorie</label>
+        <select class="form-control" name="kategorie" required>
+          <option value="">Bitte auswählen…</option>
+          {% for kategorie in kategorien %}
+            <option value="{{ kategorie.pk }}">{{ kategorie.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
     </div>
-    <div class="form-group col-md-2">
-      <label for="inputState">Type</label>
-      <select  class="form-control"  name="type">
-        <option selected>Bitte auswählen...</option>
-        <option value="income">
-          Einnahme
-        </option>
-        <option value="expense">
-          Ausgabe
-        </option>
-    
-      </select>
+
+    <div class="form-group">
+      <label>Beschreibung</label>
+      <input type="text" class="form-control" name="beschreibung" placeholder="z. B. Wocheneinkauf">
     </div>
-    
-<div class="form-group col-md-4">
-  <label for="kategorie">Kategorie</label>
-  <select class="form-control" name="kategorie" id="kategorie" required>
-    <option selected>Bitte auswählen…</option>
-    {% for kategorie in kategorien %}
-      <option value="{{ kategorie.pk }}">{{ kategorie.name }}</option>
-    {% endfor %}
-  </select>
-</div>
 
+    <div class="form-group">
+      <label>Datum</label>
+      <input type="date" class="form-control" name="datum">
+    </div>
 
-
-
-
-  </div>
-  <div class="form-group">
-    <label for="inputAddress">Beschreibung</label>
-    <input type="text" class="form-control" name="beschreibung" placeholder="Beschreibung" >
-  </div>
-
-<div class="form-group">
-        <label for="inputDate">Datum</label>
-        <input type="date" class="form-control" name="datum" placeholder="Datum" value="{{ form.datum.value|date:'Y-m-d' }}">
+    <div class="button-row">
+  <a href="{% url 'buchung' %}" class="btn btn-secondary">Abbrechen</a>
   <button type="submit" class="btn btn-primary">Speichern</button>
-</form>
+</div>
+  </form>
+</div>
 
 {% endblock navbar %}

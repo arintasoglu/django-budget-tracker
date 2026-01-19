@@ -5,28 +5,22 @@
 
 {% block template %}
 <header>
-    <div class="navbar">
-       
-        <nav>
-            <ul class="nav-links">
-                <li><a href="/übersicht">Übersicht</a></li>
-                <li><a href="/meineBuchungen">Buchungen</a></li>
-                <li><a href="/meineKategorien">Kategorien</a></li>
-                <li><a href="/diagramme">Auswertungen</a></li>
-                <li class="nav-item">
-                    <a class="btn btn-outline-dark" href="/abmelden">Abmelden</a>
-                </li>
-            </ul>
-
-        </nav>
-        
-
+  <div class="navbar">
+    <div class="logo">
+      <a href="{% url 'übersicht' %}">BudgetTracker</a>
     </div>
-   
-    
+
+    <nav>
+      <ul class="nav-links">
+        <li><a href="{% url 'übersicht' %}">Übersicht</a></li>
+        <li><a href="{% url 'buchung' %}">Buchungen</a></li>
+        <li><a href="{% url 'kategorie' %}">Kategorien</a></li>
+        <li><a href="{% url 'diagramme' %}">Auswertungen</a></li>
+        <li class="logout"><a href="{% url 'abmelden' %}">Abmelden</a></li>
+      </ul>
+    </nav>
+  </div>
 </header>
-{% block navbar %}
 
-{% endblock navbar %}
-
+{% block navbar %}{% endblock navbar %}
 {% endblock template %}

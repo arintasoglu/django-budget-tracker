@@ -1,12 +1,10 @@
 from django import forms
 from django.contrib.auth.models import User
-
+from django.contrib.auth.forms import UserCreationForm
 from .models import Buchung, Kategorie
 
 
-class RegisterModelForm(forms.ModelForm):
-    passwort = forms.CharField(widget=forms.PasswordInput)
-    confirm_passwort = forms.CharField(widget=forms.PasswordInput)
+class RegisterModelForm(UserCreationForm):
 
     class Meta:
         model = User
@@ -20,10 +18,10 @@ class RegisterModelForm(forms.ModelForm):
 
     def clean(self):
         cleaned = super().clean()
-        pw = cleaned.get("passwort")
-        pw2 = cleaned.get("confirm_passwort")
+        pw = cleaned.get("password1")
+        pw2 = cleaned.get("password2")
         if pw and pw2 and pw != pw2:
-            self.add_error("confirm_passwort", "Passwörter stimmen nicht überein.")
+            self.add_error(None, "Die Passwörter stimmen nicht überein.")
         return cleaned
 
     def save(self, commit=True):

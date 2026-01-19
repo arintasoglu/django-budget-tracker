@@ -1,18 +1,29 @@
 {% extends "navbar.html" %}
+{% block head %} {% load static %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'buchung_bearbeiten.css' %}">
+{% endblock %}
 {% block navbar %}
-
+<div class="form-wrapper">
+  <h2>Buchung bearbeiten</h2>
 
 <form method="POST" >
     {% csrf_token %}
   <div class="form-row">
+
     <div class="form-group col-md-6">
-      <label for="inputCity">Betrag</label>
+      <label>Betrag</label>
       <input type="text"  class="form-control" name="betrag" placeholder="Betrag" value="{{ buchung.betrag}}">
-      <small class="form-text text-muted"> Bitte Punkt als Dezimaltrennzeichen verwenden (z. B. 10.50) </small>
+      <small class="form-text"> 
+        Bitte Punkt als Dezimaltrennzeichen verwenden (z. B. 10.50) 
+      </small>
     </div>
+
+
+
     <div class="form-group col-md-2">
-      <label for="inputState">Type</label>
-      <select id="inputState" class="form-control"  name="type">
+      <label >Type</label>
+      <select  class="form-control"  name="type">
         <option selected>Bitte auswählen...</option>
         <option value="income" {% if buchung.type == "income" %}selected{% endif %}>
           Einnahme
@@ -24,8 +35,8 @@
       </select>
     </div>
     <div class="form-group col-md-4">
-      <label for="inputState">Kategorie</label>
-      <select id="inputState" class="form-control" name="kategorie" >
+      <label>Kategorie</label>
+      <select  class="form-control" name="kategorie" >
         <option value="{{ kategorie.pk }}" selected>{{ kategorie.name }}</option>
         <option>...</option>
       </select>
@@ -33,14 +44,19 @@
 
   </div>
   <div class="form-group">
-    <label for="inputAddress">Beschreibung</label>
+    <label >Beschreibung</label>
     <input type="text" class="form-control" name="beschreibung" placeholder="Beschreibung" value="{{ buchung.beschreibung }}">
   </div>
 
 <div class="form-group">
-        <label for="inputDate">Datum</label>
+        <label>Datum</label>
         <input type="date" class="form-control" name="datum" placeholder="Datum" value="{{ buchung.datum|date:'Y-m-d' }}">
+     <div class="button-row">
+  <a href="{% url 'buchung' %}" class="btn btn-secondary">Abbrechen</a>
   <button type="submit" class="btn btn-primary">Speichern</button>
+</div>
+  </div>
 </form>
+</div>
 
 {% endblock navbar %}

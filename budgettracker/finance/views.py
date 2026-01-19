@@ -54,14 +54,16 @@ def übersicht(request):
 
 
 def anmelden(request):
-    form = AuthenticationForm(data=request.POST or None)
-    if form.is_valid():
-        benutzername = form.cleaned_data.get("username")
-        passwort = form.cleaned_data.get("password")
-        benutzer = authenticate(request, username=benutzername, password=passwort)
-        if benutzer is not None:
+    form = AuthenticationForm(request, data=request.POST or None)
+    form.error_messages["invalid_login"] = "Benutzername oder Passwort ist falsch."
+    if request.method == "POST":
+        if form.is_valid():
+            benutzername = form.cleaned_data.get("username")
+            passwort = form.cleaned_data.get("password")
+            benutzer = authenticate(request, username=benutzername, password=passwort)
             login(request, benutzer)
             return redirect("übersicht")
+
     return render(request, "anmelden.html", {"form": form})
 
 
@@ -69,9 +71,6 @@ def registrieren(request):
     form = RegisterModelForm(request.POST or None)
     if form.is_valid():
         benutzer = form.save()
-        messages.success(
-            request, "Registrierung erfolgreich. Sie können sich jetzt anmelden."
-        )
         login(request, benutzer)
         return redirect("übersicht")
     return render(request, "registrieren.html", {"form": form})
