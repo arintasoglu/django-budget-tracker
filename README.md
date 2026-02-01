@@ -34,8 +34,6 @@ https://github.com/user-attachments/assets/300eb1c7-b199-4a7a-b31a-50da0bebf940
 
 ---
 
-## Project Structure
-
 ## Setup & Installation
 
 ### Clone the repository
