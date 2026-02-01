@@ -19,6 +19,9 @@ The application allows users to track income and expenses, manage categories, vi
 - Fully tested models and views
 
 ---
+https://github.com/user-attachments/assets/300eb1c7-b199-4a7a-b31a-50da0bebf940
+
+---
 
 ## Tech Stack
 
